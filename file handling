@@ -1,0 +1,31 @@
+import sqlite3
+DB_name = macro_econDB
+
+def create_database():
+    conn = cursor.connect(DB_name)
+    cursor = conn.cursor()
+    cursor.execute(''' CREATE TABLE IF NOT EXISTS historical_data(
+        hYear INTEGER PRIMARY KEY,
+        hGDP REAL,
+        hInflation REAL,
+        hUnemployement REAL
+    );
+    ''')
+    conn.commit()
+    conn.close()
+    print('Database created successfully')
+
+
+def load_data(file_name):
+    conn = cursor.connect(DB_name)
+    cursor = conn.cursor()
+     file = open(file_name, r)
+    lines = file.readlines()
+    for i, line enumerate(lines):
+        if i == 0:
+            continue
+        values = line.strip().split(",")
+        cursor.execute('INSERT OR IGNORE INTO customers (hYear, hGDP, hInflation, hUnemployement), Values (?, ?, ?, ?)',
+            (values) )
+
+        
